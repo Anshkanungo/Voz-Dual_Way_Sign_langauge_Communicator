@@ -1,0 +1,19 @@
+/* Footer.css */
+.footer {
+    width: 100%;
+    background-color: #323232;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-content {
+    display: flex;
+    align-items: center;
+    margin-left: 4rem;
+}
+
+.right-content {
+    display: flex;
+    align-items: center;
+    margin-right: 4rem;
+}
