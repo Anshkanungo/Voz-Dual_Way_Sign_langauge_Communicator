@@ -101,7 +101,6 @@ const TextToSign = () => {
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
-    setShowGif(false);
   };
 
   const handleKeyPress = (event) => {
@@ -128,7 +127,7 @@ const TextToSign = () => {
 
   recognition.onerror = (event) => {
     console.error('Speech recognition error:', event.error);
-    setListening(false); // Stop listening on error
+    setListening(false);
   };
 
   
@@ -156,25 +155,45 @@ const TextToSign = () => {
   const translateText = () => {
     const characters = inputText.split('');
     const images = [];
-    characters.forEach((char, index) => {
-        const image = getImageForCharacter(char);
-        if (image) {
+  
+    // Define a function to render the images one by one with a delay
+    const renderImagesWithDelay = () => {
+      let index = 0;
+      const intervalId = setInterval(() => {
+        // Check if we have processed all characters
+        if (index < characters.length) {
+          // Get the image for the current character
+          const char = characters[index];
+          const image = getImageForCharacter(char);
+  
+          // If an image exists for the character, add it to the array
+          if (image) {
             images.push(image);
+            setDisplayedImages([...images]); // Update displayed images
+  
+            // Remove the previous image after 0.8 seconds
             setTimeout(() => {
-                setDisplayedImages([image]);
-                setTimeout(() => {
-                    if (index === characters.length - 1) {
-                        // Keep the default image until next input
-                        setDisplayedImages([...images, defaultImage]);
-                    } else {
-                        // Keep the div blank instead of removing it
-                        setDisplayedImages([]); 
-                    }
-                }, 700); // Reduced time gap for image transition
-            }, (index * 1100) + 100 - 300); // Adjusted time gap for image duration and transition
+              images.shift(); // Remove the first image from the array
+              setDisplayedImages([...images]); // Update displayed images
+            }, 800);
+  
+            index++; // Move to the next character
+          }
+        } else {
+          // Stop the interval if all characters have been processed
+          clearInterval(intervalId);
         }
-    });
-};
+      }, 1000); // 1-second delay between displaying images
+    };
+  
+    // Start rendering images with a delay
+    renderImagesWithDelay();
+  };
+  
+  
+  
+
+
 function handleInput(value) {
   const displayText = document.getElementById('displayText');
   if (value.trim() !== '') {
@@ -182,29 +201,43 @@ function handleInput(value) {
   }
 }
   
-  return (
-    <>
-    <h1 className='text-center text-3xl font-bold text-neutral'>Text to Sign</h1>
-    {/* <!-- component --> */}
-<div className="flex items-center justify-center h-screen bg-transparent">
-   <div className="bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%]">
-     
-     {/* Images Change loop */}
-     <img className="mb-8 w-2/3 h-3/4 rounded-md shadow-lg mx-auto object-cover" src="https://images.unsplash.com/photo-1707343843437-caacff5cfa74?q=80&w=1975&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product designer" />
-     <div className='flex flex-col gap-0 w-full justify-center items-center'>
-     <div className='flex gap-1 '>
-     <input className='bg-light rounded-md px-2 py-2 m-0' placeholder='Enter here' type="text" />
-     <button className='bg-light w-10 rounded-md px-2 py-2 m-0 flex justify-center items-center' type="" >
-      <FaMicrophone className='text-2xl text-bakground'/>
-      </button>
-     </div>
-     <button className="bg-bakground text-light px-8 py-2 mt-2 w-44 rounded-md  font-semibold uppercase tracking-wide">Convert</button>
-     </div>
-   </div>
- </div>
-    </>
+return (
+  <>  <h1 className='text-center text-3xl font-bold text-neutral'>Text-To-Sign</h1>
+  <div className="flex items-center justify-center h-screen bg-transparent">
+    
+    <div className="bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%]">
+ 
 
-  );
+      <div className="sign-language-container">
+        {displayedImages.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            className="sign-language-image"
+            alt={`Sign language for ${inputText}`}
+          />
+        ))}
+      </div>
+      <div className="flex flex-col gap-0 w-full justify-center items-center customMarginTop">
+        <div className="flex gap-1">
+          <input
+            className="bg-light rounded-md px-2 py-2 m-0"
+            placeholder="Enter here"
+            type="text"
+            value={inputText}
+            onChange={handleInputChange}
+          />
+          <button className="bg-light w-10 rounded-md px-2 py-2 m-0 flex justify-center items-center" type="button">
+            {/* Icon for microphone */}
+          </button>
+        </div>
+        <button className="bg-bakground text-light px-8 py-2 mt-2 w-44 rounded-md font-semibold uppercase tracking-wide" onClick={translateText}>Convert</button>
+      </div>
+    </div>
+  </div>
+  </>
+
+);
 }
 
 export default TextToSign;

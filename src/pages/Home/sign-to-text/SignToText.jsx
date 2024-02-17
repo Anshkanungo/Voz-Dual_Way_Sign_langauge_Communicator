@@ -112,22 +112,38 @@ const SignToText = () => {
 
   return (
     <>
-       <h1 className='text-center text-3xl font-bold text-neutral'>Sign to Text</h1>
-    {/* <!-- component --> */}
-<div className="flex items-center justify-center h-screen bg-transparent">
-   <div className="relative flex flex-col items-center justify-center bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%]">
+    <h1 className='text-center text-3xl font-bold text-neutral'>Sign to Text</h1>
+    <div className="flex items-center justify-center h-screen bg-transparent">
+      <div className="relative flex flex-col items-center justify-center bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%]">
+        {/* Video Preview */}
+        <div className="video-controls">
+    <button onClick={toggleVideo} className="video-toggle">
+      <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
+    </button>
+    {isVideoOn && (
+      <div className="video-screen">
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          className="video-feed"
+          onUserMedia={() => captureFrames()}
+        />
+      </div>
+    )}
+  </div>
 
-    {/* Video Preview  */}
-     <div className='bg-gray-500 w-20 h-20 absolute top-[5%] right-[10%]' ></div>
-     <div className='flex flex-col gap-0 w-full justify-center items-center'>
-     <div className='flex gap-1 '>
-     <textarea rows={5} cols={30} className='bg-light rounded-md px-2 py-2 mt-16' placeholder='Enter here' type="text" /> 
-     </div>
-     <button className="bg-bakground text-light px-8 py-2 mt-16 w-44 rounded-md  font-semibold uppercase tracking-wide">Listen</button>
-     </div>
-   </div>
- </div>
-    </>
+        <div className='flex flex-col gap-0 w-full justify-center items-center'>
+        <div className="text-area">
+    <textarea className="text-input" value={sentence} readOnly></textarea>
+    <FontAwesomeIcon icon={faCopy} className="copy-icon" onClick={copyToClipboard} />
+  </div>
+          <button onClick={toggleVideo} className="bg-bakground text-light px-8 py-2 mt-16 w-44 rounded-md  font-semibold uppercase tracking-wide">Start Video</button>
+
+        </div>
+      </div>
+    </div>
+  </>
   );
 }
 
