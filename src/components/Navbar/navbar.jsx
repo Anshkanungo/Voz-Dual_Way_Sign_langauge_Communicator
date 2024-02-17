@@ -31,7 +31,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <a href="http://github.com">
+          <a href="https://github.com/Anshkanungo/voz">
             <div className='text-inactive flex flex-col items-center'>
               <FaGithub className='text-4xl'/>
               <br />
