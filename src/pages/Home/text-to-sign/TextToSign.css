@@ -1,54 +1,53 @@
 .sign-language-container {
-    position: relative; /* Change position to relative */
-    /* top: 2%; */ /* Remove top positioning */
-    margin-right: 50px; 
-    width: 85%;
-    height: 300px;
-    margin-right: 10%;
+  position: relative; /* Change position to relative */
+  /* top: 2%; */ /* Remove top positioning */
+  margin-right: 50px;
+  width: 85%;
+  height: 300px;
+  margin-right: 10%;
 }
 
 .sign-language-image {
-    width: 250px; /* Triple the size */
-    height: auto; /* Triple the size */
-    margin: 30px; /* Adjust as needed */
-    /* position: relative; */ /* Remove position relative */
+  width: 250px; /* Triple the size */
+  height: auto; /* Triple the size */
+  margin: 30px; /* Adjust as needed */
+  /* position: relative; */ /* Remove position relative */
 }
 
 .sign-language-image::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    z-index: -1;
-    border-radius: inherit;
-    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
-    filter: blur(10px); /* Adjust blur intensity as needed */
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  filter: blur(10px); /* Adjust blur intensity as needed */
 }
 
 /* styles.css */
 
 /* Example styles for spacing */
 .text-above-card {
-    margin-top: 20%; /* Adjust as needed */
-  }
-
+  margin-top: 20%; /* Adjust as needed */
+}
 
 .flex-container {
-    position: relative;
-  }
-  
-  .avatar {
-    position: absolute;
-    top: -50px; /* Adjust the top position as needed */
-    z-index: 1; /* Ensure the avatar is above the input text */
-  }
-  
-  .input-field {
-    z-index: 0; /* Ensure the input text is below the avatar */
-  }
+  position: relative;
+}
 
-  .customMarginTop {
-    margin-top: 25%;
-  }
+.avatar {
+  position: absolute;
+  top: -50px; /* Adjust the top position as needed */
+  z-index: 1; /* Ensure the avatar is above the input text */
+}
+
+.input-field {
+  z-index: 0; /* Ensure the input text is below the avatar */
+}
+
+.customMarginTop {
+  margin-top: 5%;
+}
