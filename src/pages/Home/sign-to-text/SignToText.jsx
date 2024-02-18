@@ -1,11 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './SignToText.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVideo, faVideoSlash, faCopy, faPlay } from '@fortawesome/free-solid-svg-icons';
-import waveformImage from '../../../assets/waveform.png';
-import yellowWaveformImage from '../../../assets/yellow-waveform.png';
-import Webcam from 'react-webcam';
-import * as tf from '@tensorflow/tfjs';
+import React, { useState, useRef, useEffect } from "react";
+import "./SignToText.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faVideo,
+  faVideoSlash,
+  faCopy,
+  faPlay,
+} from "@fortawesome/free-solid-svg-icons";
+import waveformImage from "../../../assets/waveform.png";
+import yellowWaveformImage from "../../../assets/yellow-waveform.png";
+import Webcam from "react-webcam";
+import * as tf from "@tensorflow/tfjs";
 import { FaUserFriends } from "react-icons/fa";
 
 const SignToText = () => {
@@ -14,7 +19,7 @@ const SignToText = () => {
   const videoRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const [model, setModel] = useState(null);
-  const [sentence, setSentence] = useState('');
+  const [sentence, setSentence] = useState("");
   const webcamRef = useRef(null);
 
   useEffect(() => {
@@ -23,14 +28,14 @@ const SignToText = () => {
 
   const loadModel = async () => {
     try {
-      const loadedModel = await tf.loadLayersModel('./model/model.json');
+      const loadedModel = await tf.loadLayersModel("./model/model.json");
       setModel(loadedModel);
     } catch (error) {
-      console.error('Error loading model:', error);
+      console.error("Error loading model:", error);
     }
   };
 
-  const startVideo = () => {
+  const startVideo = async () => {
     setIsVideoOn(true);
   };
 
@@ -48,18 +53,17 @@ const SignToText = () => {
 
   const captureFrames = async () => {
     if (!isVideoOn || !model) return;
-  
+
     const intervalId = setInterval(async () => {
       if (!webcamRef.current) return;
       const imageSrc = webcamRef.current.getScreenshot();
       const image = await loadImage(imageSrc);
       const char = await predict(image);
-      setSentence(prevSentence => prevSentence + char);
+      setSentence((prevSentence) => prevSentence + char);
     }, 1000);
-  
+
     return () => clearInterval(intervalId);
   };
-  
 
   const loadImage = async (src) => {
     return new Promise((resolve, reject) => {
@@ -92,7 +96,7 @@ const SignToText = () => {
     const text = textAreaRef.current.value.trim();
     if (!text) return;
 
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       const speech = new SpeechSynthesisUtterance();
       speech.text = text;
       speech.volume = 1;
@@ -106,45 +110,67 @@ const SignToText = () => {
       };
       window.speechSynthesis.speak(speech);
     } else {
-      alert('Text-to-speech is not supported on your device.');
+      alert("Text-to-speech is not supported on your device.");
     }
   };
 
   return (
     <>
-    <h1 className='text-center text-3xl font-bold text-neutral'>Sign to Text</h1>
-    <div className="flex items-center justify-center h-screen bg-transparent">
-      <div className="relative flex flex-col items-center justify-center bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%]">
-        {/* Video Preview */}
-        <div className="video-controls">
-    <button onClick={toggleVideo} className="video-toggle">
-      <FontAwesomeIcon icon={isVideoOn ? faVideo : faVideoSlash} />
-    </button>
-    {isVideoOn && (
-      <div className="video-screen">
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          className="video-feed"
-          onUserMedia={() => captureFrames()}
-        />
-      </div>
-    )}
-  </div>
+      <h1 className="text-center text-3xl mt-8 font-bold text-neutral">
+        Sign to Text
+      </h1>
+      <div className="flex items-center justify-center h-screen bg-transparent">
+        <div className="relative -mt-44 flex flex-col items-center justify-center bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs h-2/3 min-w-[90%] md:min-w-[70%]">
+          {/* Video Preview */}
+          <div className="video-controls">
+            <button
+              onClick={toggleVideo}
+              className="video-toggle absolute top-0 left-0"
+            >
+              <FontAwesomeIcon
+                className={
+                  isVideoOn ? "text-red-700 text-3xl" : "text-light text-3xl"
+                }
+                icon={isVideoOn ? faVideo : faVideoSlash}
+              />
+            </button>
+            {isVideoOn && (
+              <div className="video-screen absolute top-0 right-0 rounded-md">
+                <Webcam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  className="video-feed rounded-md"
+                  onUserMedia={() => captureFrames()}
+                />
+              </div>
+            )}
+          </div>
 
-        <div className='flex flex-col gap-0 w-full justify-center items-center'>
-        <div className="text-area">
-    <textarea className="text-input" value={sentence} readOnly></textarea>
-    <FontAwesomeIcon icon={faCopy} className="copy-icon" onClick={copyToClipboard} />
-  </div>
-          <button onClick={toggleVideo} className="bg-bakground text-light px-8 py-2 mt-16 w-44 rounded-md  font-semibold uppercase tracking-wide">Start Video</button>
-
+          <div className="flex flex-col gap-0 w-full justify-center items-center">
+            <div className="text-area">
+              <textarea
+                className="text-input bg-light rounded-md"
+                value={sentence}
+                readOnly
+              ></textarea>
+              {/* <FontAwesomeIcon
+                icon={faCopy}
+                className="copy-icon"
+                onClick={copyToClipboard}
+              /> */}
+            </div>
+            <button
+              onClick={toggleVideo}
+              className="bg-bakground text-light px-8 py-2 mt-16 w-44 rounded-md  font-semibold uppercase tracking-wide"
+            >
+              Start Video
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </>
+    </>
   );
-}
+};
 
 export default SignToText;

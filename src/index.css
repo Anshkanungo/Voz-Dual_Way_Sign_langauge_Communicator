@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+.carousel.carousel-slider .control-arrow {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
