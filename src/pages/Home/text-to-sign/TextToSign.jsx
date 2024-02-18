@@ -224,8 +224,8 @@ const TextToSign = () => {
               <button
                 className="bg-light w-10 rounded-md px-2 py-2 m-0 flex justify-center items-center"
                 type="button"
+                onClick={handleListen}
               >
-                {/* Icon for microphone */}
                 <FaMicrophone className="text-2xl text-bakground"></FaMicrophone>
               </button>
             </div>
